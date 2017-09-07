@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
 import os
+from datetime import datetime
 
 class NameForm(Form):
     name = StringField("what is your name?", validators=[Required()])
@@ -29,6 +30,7 @@ class User(db.Model):
     __tablename__ = 't_user'
     id = db.Column('Fid', db.Integer, primary_key=True)
     name = db.Column('Fuser', db.String(32), unique=True, index=True)
+    modifytime = db.Column('Fmodify_time', db.DateTime, index=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -37,16 +39,16 @@ def index():
     if form.validate_on_submit():
         user = User.query.filter_by(name=form.name.data).first()
         if user is None:
-            user = User(name = form.name.data)
+            user = User(name = form.name.data, modifytime = datetime.now())
             db.session.add(user)
-            session['know'] = False 
+            session['known'] = False 
         else:
-            session['know'] = True
+            session['known'] = True
         session['name'] = form.name.data
         form.name.data = ''
         return redirect(url_for("index"))
-    return render_template('form_index.html', form=form, name=session.get('name'),
-        know = session.get('know', False))
+    return render_template('db_index.html', form=form, name=session.get('name'),
+        known = session.get('known', False))
 
 @app.route('/user/<name>')
 def user2(name):
