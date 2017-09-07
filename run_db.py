@@ -20,7 +20,7 @@ app.config['SECRET_KEY'] = 'hard to guess string' # must set, or error 'A secret
 bootstrap = Bootstrap(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] =\
-'mysql://root:root1234@10.12.141.38/test'
+'mysql://root:root1234@127.0.0.1/test'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
